@@ -1,65 +1,93 @@
-# 🚀 SmartBook — AI-Powered Appointment & CRM Platform for Micro-Businesses
+# SmartBook — Universal B2B2C Reservation & Appointment Engine
 
-> **Google Gemini Hackathon 2026** | **Team Medhavats** (Rungta University)  
-> *Track: Open Track*
+A hackathon-ready, full-stack web application for service-based enterprises to manage bookings, payments, and customer communication.
 
----
+## Tech Stack
 
-## 📌 Problem Statement
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS, Shadcn UI |
+| Backend | Node.js, Express, TypeScript, Prisma ORM |
+| Database | PostgreSQL (via Prisma) |
+| Real Integrations | Gemini API, Google Maps API, FamPay API, Twilio API |
+| Mocked Integrations | Google Calendar API, Google Meet API, Cloud Storage |
 
-Small service businesses in India (salons, spas, clinics, gyms) face massive operational friction:
-* **Appointment Chaos:** Bookings are managed manually over fragmented WhatsApp chats, leading to double-bookings and schedule conflicts.
-* **Heavy Revenue Leakage:** A **25% customer no-show rate** costs individual micro-businesses between **₹50,000 to ₹2,00,000** every month.
-* **Manual Operational Toll:** Store owners waste **15+ hours per week** manually answering booking calls and coordinating schedules.
-* **Zero Customer Retention:** Over **68% of first-time customers never return** due to the complete lack of automated follow-ups or loyalty systems.
+## Repository Structure
 
----
+```
+smartbook-web/
+├── client/                 # Next.js Frontend
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   └── app/            # App Router pages
+│   └── .env.local          # Frontend env vars (Google Maps)
+└── server/                 # Express Backend
+    ├── src/
+    │   ├── controllers/    # Request handlers
+    │   ├── services/       # Business logic & external APIs
+    │   ├── models/         # Prisma schema
+    │   └── server.ts       # Express entry point
+    └── .env                # Backend env vars (Gemini, Twilio, FamPay)
+```
 
-##💡 Our Solution
+## Environment Variables
 
-**SmartBook** is an AI-driven, WhatsApp-native appointment and customer management platform designed specifically for Indian micro-businesses (under 10 staff members) that sets up in under **5 minutes**.
+### Backend (`server/.env`)
+```bash
+GEMINI_API_KEY=AQ.Ab8RN6LJVbTffUvi5VhDK6GcdIoOT-McPWiS-0vLCZoiSMIcGA
+TWILIO_ACCOUNT_SID=AC8bc34dc8ac3b3a5a336207551ee2c846
+TWILIO_AUTH_TOKEN=6cd5e076962270e1f6a74d46cf0728ce
+FAMPAY_API_KEY=fam_af8dcc8ae13251889832052c048b6ab8ee221671
+DATABASE_URL="postgresql://user:password@localhost:5432/smartbook?schema=public"
+PORT=3001
+```
 
-### Key Features:
-* **WhatsApp-Native Scheduling:** Customers book, reschedule, or cancel appointments directly via WhatsApp chats or a sleek web link.
-* **Automated UPI Deposits:** Collects small advance deposits via UPI to eliminate no-shows entirely.
-* **AI Conversational Intelligence:** Powered by **Gemini 2.5 Flash** to parse natural language messages, screenshots, and voice notes into structured calendar events.
-* **Smart Waitlist & Slot Recovery:** Automatically offers canceled slots to waitlisted customers via WhatsApp.
-* **Real-Time Analytics Dashboard:** Business owners get live occupancy graphs, daily revenue analytics, and automated retention alerts.
+### Frontend (`client/.env.local`)
+```bash
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyDu147TPWah4EemvOAVwVz-w9DkZw-EPGQ
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
 
----
+## Getting Started
 
-## 🧠 How Gemini Powers SmartBook
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 14+
+- npm or pnpm
 
-SmartBook utilizes Google's Gemini API at three critical levels:
+### Backend Setup
+```bash
+cd server
+npm install
+npx prisma generate
+npx prisma db push
+npm run dev
+```
 
-1. **Multimodal Chat Parsing:** Processes raw text, voice notes, and chat screenshots sent by customers on WhatsApp to extract desired dates, times, and service requests.
-2. **Structured Data Generation (JSON Mode):** Transforms messy customer conversations into clean, structured JSON objects for seamless calendar synchronization.
-3. **Agentic Function Calling:** Automatically invokes backend functions to verify slot availability, dispatch WhatsApp notification payloads, and manage waitlists.
+### Frontend Setup
+```bash
+cd client
+npm install
+npm run dev
+```
 
----
+## API Endpoints
 
-## 🛠️ Tech Stack
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/bookings` | Create a new booking |
+| GET | `/api/bookings/:id` | Get booking details |
+| POST | `/api/payments` | Process payment via FamPay |
+| POST | `/api/media/upload` | Upload media to local storage |
+| POST | `/api/ai/chat` | Chat with Gemini assistant |
+| POST | `/api/waitlist/notify` | Trigger SMS notifications |
 
-* **Frontend:** React, Tailwind CSS, Chart.js (for analytics & dashboard visualizations)
-* **Backend & Hosting:** Node.js, Express, Firebase (Firestore & Authentication)
-* **AI Engine:** Google Gemini 2.5 Flash API (via Google AI Studio)
-* **Payments & Messaging:** Razorpay / UPI API, Twilio / Gupshup WhatsApp Business API
+## Mocked Integrations
 
----
+- **Google Calendar**: `services/calendarSync.ts` returns `200 OK` without OAuth
+- **Google Meet**: `controllers/bookingController.ts` generates `https://meet.google.com/mock-xyz-abc`
+- **Cloud Storage**: `controllers/mediaController.ts` saves to `server/uploads/`
 
-## 📂 Repository Structure
+## License
 
-```text
-smartbook/
-├── public/
-│   ├── index.html        # Landing Page
-│   ├── book.html         # Public Customer Booking Page
-│   ├── admin.html        # Admin Real-Time Dashboard & Analytics
-│   ├── manage.html       # Customer Appointment Management & Loyalty Portal
-│   └── js/
-│       └── firebase.js   # Firebase & Realtime Firestore Configuration
-├── functions/
-│   ├── index.js          # Node.js Backend & Gemini API Function Calling
-│   └── whatsapp.js       # Webhook Handlers for WhatsApp API
-├── README.md
-└── package.json
+MIT
