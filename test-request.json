@@ -1,5 +1,0 @@
-{
-  "enterpriseId": "test",
-  "sessionId": "test-session",
-  "messages": [{"role": "user", "content": "Hello"}]
-}
