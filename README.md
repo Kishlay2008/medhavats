@@ -1,93 +1,21 @@
-# SmartBook — Universal B2B2C Reservation & Appointment Engine
+# SmartBook — GitHub Pages version
 
-A hackathon-ready, full-stack web application for service-based enterprises to manage bookings, payments, and customer communication.
+## Deploy the static demo
+1. Create a GitHub repository (for example, `smartbook`).
+2. Upload the contents of this folder to the repository root. `index.html` must be in the root.
+3. Open **Settings → Pages**.
+4. Under **Build and deployment**, select **Deploy from a branch**, choose `main` and `/(root)`, then Save.
+5. Wait for GitHub Pages to publish the site. The URL will be shown in Settings → Pages.
 
-## Tech Stack
+## Pages
+- `index.html` — landing page
+- `book.html` — booking demo
+- `admin.html` — merchant dashboard demo
+- `manage.html` — customer portal demo
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS, Shadcn UI |
-| Backend | Node.js, Express, TypeScript, Prisma ORM |
-| Database | PostgreSQL (via Prisma) |
-| Real Integrations | Gemini API, Google Maps API, FamPay API, Twilio API |
-| Mocked Integrations | Google Calendar API, Google Meet API, Cloud Storage |
+## Important limitations
+GitHub Pages only serves static files. It does not run Express/Node.js API routes, Firebase Functions, or keep API secrets safe. The booking form currently stores demo bookings in the visitor's browser (`localStorage`), and the AI panel displays a demo response; it does not send real WhatsApp messages, accept payments, or call Gemini.
 
-## Repository Structure
+The optional backend source and `package.json` are in `backend/` for separate deployment to Firebase Functions or another server platform. Before using it in production, configure Firebase and a server-side `GEMINI_API_KEY` secret, and implement real database, payment, and messaging integrations. Do not put Gemini secret keys in frontend files.
 
-```
-smartbook-web/
-├── client/                 # Next.js Frontend
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   └── app/            # App Router pages
-│   └── .env.local          # Frontend env vars (Google Maps)
-└── server/                 # Express Backend
-    ├── src/
-    │   ├── controllers/    # Request handlers
-    │   ├── services/       # Business logic & external APIs
-    │   ├── models/         # Prisma schema
-    │   └── server.ts       # Express entry point
-    └── .env                # Backend env vars (Gemini, Twilio, FamPay)
-```
-
-## Environment Variables
-
-### Backend (`server/.env`)
-```bash
-GEMINI_API_KEY=AQ.Ab8RN6LJVbTffUvi5VhDK6GcdIoOT-McPWiS-0vLCZoiSMIcGA
-TWILIO_ACCOUNT_SID=AC8bc34dc8ac3b3a5a336207551ee2c846
-TWILIO_AUTH_TOKEN=6cd5e076962270e1f6a74d46cf0728ce
-FAMPAY_API_KEY=fam_af8dcc8ae13251889832052c048b6ab8ee221671
-DATABASE_URL="postgresql://user:password@localhost:5432/smartbook?schema=public"
-PORT=3001
-```
-
-### Frontend (`client/.env.local`)
-```bash
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyDu147TPWah4EemvOAVwVz-w9DkZw-EPGQ
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+
-- PostgreSQL 14+
-- npm or pnpm
-
-### Backend Setup
-```bash
-cd server
-npm install
-npx prisma generate
-npx prisma db push
-npm run dev
-```
-
-### Frontend Setup
-```bash
-cd client
-npm install
-npm run dev
-```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/bookings` | Create a new booking |
-| GET | `/api/bookings/:id` | Get booking details |
-| POST | `/api/payments` | Process payment via FamPay |
-| POST | `/api/media/upload` | Upload media to local storage |
-| POST | `/api/ai/chat` | Chat with Gemini assistant |
-| POST | `/api/waitlist/notify` | Trigger SMS notifications |
-
-## Mocked Integrations
-
-- **Google Calendar**: `services/calendarSync.ts` returns `200 OK` without OAuth
-- **Google Meet**: `controllers/bookingController.ts` generates `https://meet.google.com/mock-xyz-abc`
-- **Cloud Storage**: `controllers/mediaController.ts` saves to `server/uploads/`
-
-## License
-
-MIT
+`js/firebase-config.js` contains placeholder Firebase values and is not used by the static demo until you configure and initialize Firebase.
